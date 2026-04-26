@@ -1,336 +1,441 @@
-\# TaiLoTyper
+# TaiLoTyper
 
+**Type Taiwanese Hokkien in Tâi-lô on a standard English keyboard.**
 
+TaiLoTyper is a Windows-friendly tool that lets you type **Taiwanese Hokkien (Tâi-lô / Tai-lo)** using **tone numbers**, then convert it into proper **tone-marked Tai-lo**.
 
-Type \*\*Taiwanese Hokkien in Tâi-lô\*\* on a standard English keyboard using \*\*tone-number input\*\*.
+Instead of manually typing characters like:
 
+- **á**
+- **ê**
+- **ū**
+- **a̍**
 
+you can type normal letters plus a number at the end of each syllable.
 
-TaiLoTyper converts text like:
-
-
-
-```text
-
-Gua2 e5 tshu3-ting2 u7 tsit8 tsiah niau1-a2.
-
-```
-
-
-
-into:
-
-
+For example:
 
 ```text
-
-Guá ê tshù-tíng ū tsi̍t tsiah niau-á.
-
+Gua2 e5 tshu3-ting2 u7 niau1-a2.
 ```
 
+becomes:
 
+```text
+Guá ê tshù-tíng ū niau-á.
+```
 
-\## Why this exists
+---
 
+# Why this exists
 
-
-Windows can display Unicode Tai-lo, but it does \*\*not include a built-in, ergonomic input method\*\* for typing Tai-lo on a standard English keyboard.
-
-
+Windows can display Unicode Tai-lo, but it does **not include a built-in, ergonomic input method** for typing Tai-lo on a standard English keyboard.
 
 TaiLoTyper provides a simpler workflow:
 
+- Type normal letters
+- Add tone numbers at the end of syllables
+- Press a hotkey
+- Get proper tone-marked Tai-lo
 
+This project is designed for:
 
-\- Type normal letters
+- Tai-lo learners
+- Taiwanese Hokkien learners
+- Teachers
+- people making study materials
+- anyone who wants a practical Tai-lo typing workflow on Windows
 
-\- Add tone numbers at the end of each syllable
+---
 
-\- Convert to proper tone-marked Tai-lo
+# The easiest way to use it (Windows)
 
+## What it does
 
+TaiLoTyper includes a **Windows hotkey tool**.
 
-This is intended as a lightweight, beginner-friendly way to write Taiwanese Hokkien without memorizing special keyboard layouts.
+### Workflow
 
+1. Type tone-number Tai-lo anywhere (Notepad, browser, docs, etc.)
+2. Select the text
+3. Press **Ctrl + Alt + T**
+4. TaiLoTyper replaces the selected text with tone-marked Tai-lo
 
+### Example
 
-\## Features (MVP)
+You type:
 
+```text
+Gua2 e5 tshu3-ting2 u7 niau1-a2.
+```
 
+After pressing **Ctrl + Alt + T**, it becomes:
 
-\- Convert tone-number input to tone-marked Tai-lo
+```text
+Guá ê tshù-tíng ū niau-á.
+```
 
-\- Preserve hyphenated syllables
+---
 
-\- Handle common tones:
+# Quick setup for non-programmers (Windows)
 
-&#x20; - 1 (no mark)
+If you just want to **use** TaiLoTyper and do not care about Python details, follow these steps.
 
-&#x20; - 2 (acute)
+## Step 1: Download this project
 
-&#x20; - 3 (grave)
+Either:
 
-&#x20; - 5 (circumflex)
+- clone it with Git, **or**
+- click **Code → Download ZIP** on GitHub, then unzip it somewhere easy to find
 
-&#x20; - 7 (macron)
+For example:
 
-&#x20; - 8 (vertical mark / combining mark)
+```text
+C:\Users\YourName\tailo-typer
+```
 
-\- Simple Python converter
+---
 
-\- Test suite with `pytest`
+## Step 2: Install Python
 
+Download Python from:
 
+- https://www.python.org/downloads/
 
-\## Example conversions
+During installation:
 
+- **IMPORTANT:** check the box that says:
 
+```text
+Add Python to PATH
+```
 
-| Input | Output |
+Then finish the install.
 
+To verify Python works, open **PowerShell** and run:
+
+```powershell
+python --version
+```
+
+You should see something like:
+
+```text
+Python 3.x.x
+```
+
+---
+
+## Step 3: Install AutoHotkey v2
+
+Download AutoHotkey v2 from:
+
+- https://www.autohotkey.com/
+
+**Important:** install **AutoHotkey v2**, not v1.
+
+---
+
+## Step 4: Update the script paths (one-time setup)
+
+Open this file:
+
+```text
+src\windows\TaiLoTyper.ahk
+```
+
+Find these two lines:
+
+```ahk
+pythonExe := "C:\Users\tommy\tailo-typer\.venv\Scripts\python.exe"
+scriptPath := "C:\Users\tommy\tailo-typer\src\tailo_converter.py"
+```
+
+Replace them with paths that match **your computer**.
+
+### Example (if you are not using a virtual environment)
+
+```ahk
+pythonExe := "python"
+scriptPath := "C:\Users\YourName\tailo-typer\src\tailo_converter.py"
+```
+
+### Example (if you *are* using the included virtual environment)
+
+```ahk
+pythonExe := "C:\Users\YourName\tailo-typer\.venv\Scripts\python.exe"
+scriptPath := "C:\Users\YourName\tailo-typer\src\tailo_converter.py"
+```
+
+> **Tip:** If you are a normal user and just want it to work, using `pythonExe := "python"` is usually easiest *if Python is installed and on PATH*.
+
+Save the file.
+
+---
+
+## Step 5: Run the hotkey script
+
+Double-click:
+
+```text
+src\windows\TaiLoTyper.ahk
+```
+
+If AutoHotkey is installed correctly, the script will start running in the background.
+
+You should see a green AutoHotkey icon in the Windows system tray.
+
+---
+
+## Step 6: Try it
+
+Open **Notepad** and type:
+
+```text
+Gua2 e5 tshu3-ting2 u7 niau1-a2.
+```
+
+Select the text.
+
+Press:
+
+```text
+Ctrl + Alt + T
+```
+
+It should change to:
+
+```text
+Guá ê tshù-tíng ū niau-á.
+```
+
+---
+
+# How to type Tai-lo with tone numbers
+
+The basic rule is simple:
+
+- Type the syllable
+- Put the **tone number at the end of the syllable**
+
+### Examples
+
+| You type | TaiLoTyper converts it to |
 |---|---|
-
 | `gua2` | `guá` |
-
 | `e5` | `ê` |
-
 | `tshu3` | `tshù` |
-
 | `u7` | `ū` |
-
 | `tsit8` | `tsi̍t` |
-
-| `tshu3-ting2` | `tshù-tíng` |
-
 | `niau1-a2` | `niau-á` |
 
+---
 
+# Supported tone numbers (current MVP)
 
-\## Current status
+| Tone | Current behavior | Example input | Example output |
+|---|---|---|---|
+| 1 | no visible mark | `niau1` | `niau` |
+| 2 | acute accent | `gua2` | `guá` |
+| 3 | grave accent | `tshu3` | `tshù` |
+| 4 | currently treated as no visible mark in MVP | `sik4` | `sik` |
+| 5 | circumflex | `e5` | `ê` |
+| 7 | macron | `u7` | `ū` |
+| 8 | vertical mark / combining mark | `tsit8` | `tsi̍t` |
 
+> **Note:** This is an early MVP. Tone 4 / checked-tone handling will improve in future versions.
 
+---
 
-This repo currently contains:
+# Example conversions
 
+| Input | Output |
+|---|---|
+| `gua2` | `guá` |
+| `e5` | `ê` |
+| `tshu3` | `tshù` |
+| `u7` | `ū` |
+| `tsit8` | `tsi̍t` |
+| `tshu3-ting2` | `tshù-tíng` |
+| `niau1-a2` | `niau-á` |
+| `tai5-uan5` | `tâi-uân` |
 
+---
 
-\- A \*\*Python MVP converter\*\*
+# If the hotkey does not work
 
-\- Unit tests for basic tone conversion
+## Make sure AutoHotkey is running
 
-\- Initial project structure for a future \*\*Windows typing helper\*\*
+You should see a green AutoHotkey icon in the system tray.
 
+If not:
 
+- double-click `src\windows\TaiLoTyper.ahk` again
 
-Planned next step:
+---
 
+## If you edited the `.ahk` file
 
+AutoHotkey does **not** automatically reload after edits.
 
-\- A \*\*Windows AutoHotkey tool\*\* that converts selected text with a hotkey (for example, `Ctrl+Alt+T`)
+If you changed the script:
 
+1. Right-click the green AutoHotkey icon
+2. Click **Exit**
+3. Double-click `src\windows\TaiLoTyper.ahk` again
 
+---
 
-\## Quick start
+## If nothing happens when you press Ctrl + Alt + T
 
+Check:
 
+- Is text selected?
+- Is AutoHotkey running?
+- Did you set the correct `pythonExe` path?
+- Did you set the correct `scriptPath` path?
+- Does `python --version` work in PowerShell?
 
-\### 1. Clone the repo
+---
 
+# Command-line usage (optional)
 
+If you prefer, you can also use TaiLoTyper directly from the command line.
 
-```bash
-
-git clone https://github.com/vdeeplearning/tailo-typer.git
-
-cd tailo-typer
-
-```
-
-
-
-\### 2. Create a virtual environment
-
-
-
-\*\*Windows PowerShell:\*\*
-
-
+## Convert one phrase
 
 ```powershell
-
-py -m venv .venv
-
-.\\.venv\\Scripts\\Activate.ps1
-
-pip install -U pip
-
-pip install pytest
-
+python src\tailo_converter.py "Gua2 e5 tshu3-ting2 u7 niau1-a2."
 ```
 
-
-
-\### 3. Run the converter
-
-
-
-```powershell
-
-python src\\tailo\_converter.py "Gua2 e5 tshu3-ting2 u7 tsit8 tsiah niau1-a2."
-
-```
-
-
-
-Expected output:
-
-
+Output:
 
 ```text
-
-Guá ê tshù-tíng ū tsi̍t tsiah niau-á.
-
+Guá ê tshù-tíng ū niau-á.
 ```
 
+---
 
+## Interactive mode
 
-\### 4. Run tests
-
-
+Run with no arguments:
 
 ```powershell
-
-pytest
-
+python src\tailo_converter.py
 ```
 
+Then type lines one at a time.
 
+---
 
-\## Project structure
+# For developers
 
+This repo also includes a Python converter core and tests.
 
+## Project structure
 
 ```text
-
 tailo-typer/
-
 ├── README.md
-
 ├── docs/
-
 │   └── user-guide.md
-
 ├── src/
-
-│   ├── \_\_init\_\_.py
-
-│   └── tailo\_converter.py
-
+│   ├── __init__.py
+│   ├── tailo_converter.py
+│   └── windows/
+│       └── TaiLoTyper.ahk
 ├── tests/
-
-│   └── test\_tailo\_converter.py
-
+│   └── test_tailo_converter.py
 └── examples/
-
-&#x20;   └── examples.txt
-
+    └── examples.txt
 ```
 
+---
 
+## Local development setup (PowerShell)
 
-\## Design goals
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install pytest
+```
 
+Run tests:
 
+```powershell
+pytest
+```
 
-\- \*\*Ergonomic:\*\* easy to type on a normal English keyboard
+---
 
-\- \*\*Simple:\*\* no custom keyboard layout required
+# Current status
 
-\- \*\*Portable:\*\* future Windows utility should be easy to distribute
+## Working now
 
-\- \*\*Transparent:\*\* rules should be understandable and documented
+- Python Tai-lo tone-number converter
+- Interactive CLI mode
+- File-based conversion mode
+- Windows AutoHotkey MVP
+- Hotkey conversion using **Ctrl + Alt + T**
+- Basic test suite
 
-\- \*\*Extensible:\*\* converter logic should be testable and improvable
+## Still planned
 
+- Better tone-mark placement heuristics
+- Improved checked-tone handling
+- Better packaging for non-technical users
+- A cleaner one-click Windows release
+- Demo GIF / video
+- Possibly a standalone `.exe`
 
+---
 
-\## Known limitations (current MVP)
-
-
+# Known limitations
 
 This is an early prototype.
 
-
-
 Current limitations include:
 
+- Tone-mark placement uses simplified heuristics
+- Not all Tai-lo orthographic edge cases are handled yet
+- No dictionary validation yet
+- Tone 4 / checked-tone behavior is still simplified
+- The Windows MVP currently requires local Python + AutoHotkey
+- Paths in the `.ahk` script must currently be configured manually
 
+---
 
-\- Tone-mark placement uses simplified heuristics
+# Why this is an interesting project
 
-\- Not all Tai-lo orthographic edge cases are handled yet
+TaiLoTyper is small, but it touches several real engineering problems:
 
-\- No dictionary validation yet
+- Unicode and combining diacritics
+- orthography-aware text transformation
+- input ergonomics
+- Windows automation
+- UTF-8 encoding pitfalls
+- user-focused tooling for under-served language workflows
 
-\- No live Windows hotkey utility yet
+---
 
-\- Some vowel combinations may need improved placement rules
+# Contributing
 
+Suggestions, bug reports, and example conversions are very welcome—especially from:
 
+- Taiwanese speakers
+- Tai-lo users
+- Taiwanese Hokkien learners
+- teachers creating romanized materials
 
-\## Roadmap
+If you find an incorrect conversion, please open an issue with:
 
+- the input you typed
+- the output you expected
+- the output TaiLoTyper produced
 
+---
 
-\- \[x] Python tone-number converter MVP
-
-\- \[x] Basic test suite
-
-\- \[ ] Improve vowel nucleus detection rules
-
-\- \[ ] Add more test coverage
-
-\- \[ ] Create CLI polish / packaging
-
-\- \[ ] Build AutoHotkey Windows hotkey converter
-
-\- \[ ] Add demo GIF
-
-\- \[ ] Add downloadable release
-
-
-
-\## Why this is interesting
-
-
-
-This project is small, but it touches several non-trivial problems:
-
-
-
-\- Unicode and combining diacritics
-
-\- Orthography-aware text transformation
-
-\- Input ergonomics
-
-\- Language-tool UX
-
-\- Windows-first distribution
-
-
-
-\## Contributing
-
-
-
-Contributions, bug reports, and suggestions are welcome—especially from Taiwanese speakers, Tai-lo learners, and anyone familiar with Taiwanese orthography.
-
-
-
-\## License
-
-
+# License
 
 TBD
-
