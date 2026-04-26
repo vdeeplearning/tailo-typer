@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
-; TaiLoTyper MVP (robust file-to-file version)
+; TaiLoTyper MVP (auto-detecting version)
 ; Select tone-number Tai-lo text, then press Ctrl+Alt+T.
 
 ^!t::
@@ -19,8 +19,21 @@
 
     selectedText := A_Clipboard
 
-    pythonExe := "C:\Users\tommy\tailo-typer\.venv\Scripts\python.exe"
-    scriptPath := "C:\Users\tommy\tailo-typer\src\tailo_converter.py"
+    ; Auto-detect paths based on this script's location.
+    ; This script lives in: repo\src\windows\TaiLoTyper.ahk
+    ; So repo root is two folders up from A_ScriptDir.
+    repoRoot := A_ScriptDir "\..\.."
+    scriptPath := repoRoot "\src\tailo_converter.py"
+
+    ; Prefer local virtualenv Python if it exists.
+    venvPython := repoRoot "\.venv\Scripts\python.exe"
+
+    if FileExist(venvPython) {
+        pythonExe := venvPython
+    } else {
+        ; Fallback to system Python on PATH
+        pythonExe := "python"
+    }
 
     tempInput := A_Temp "\tailo_input.txt"
     tempOutput := A_Temp "\tailo_output.txt"
@@ -42,7 +55,7 @@
     RunWait(command, , "Hide")
 
     if !FileExist(tempOutput) {
-        MsgBox "Conversion failed: no output file was created.`n`nCommand:`n" command
+        MsgBox "Conversion failed: no output file was created.`n`nCheck that Python is installed and that tailo_converter.py exists."
         A_Clipboard := oldClipboard
         return
     }
