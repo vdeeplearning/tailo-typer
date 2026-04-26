@@ -1,10 +1,21 @@
-"""Tai-lo tone-number converter."""
+"""Tai-lo tone-number converter.
+
+Converts Taiwanese Hokkien Tai-lo written with tone numbers into
+tone-marked Tai-lo.
+"""
 
 from __future__ import annotations
 
 import argparse
 import re
 import sys
+
+
+if hasattr(sys.stdin, "reconfigure"):
+    sys.stdin.reconfigure(encoding="utf-8")
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 
 TONE_MARKS: dict[str, dict[str, str]] = {
@@ -22,12 +33,14 @@ TONE_NUMBER_PATTERN = re.compile(r"[A-Za-z]+[1-8]")
 
 
 def preserve_case(original: str, marked: str) -> str:
+    """Preserve uppercase letters when applying a tone mark."""
     if original.isupper():
         return marked.upper()
     return marked
 
 
 def find_tone_target(syllable: str) -> int | None:
+    """Return the index of the letter that should receive the tone mark."""
     lower = syllable.lower()
 
     for vowel in ("a", "e"):
@@ -48,6 +61,7 @@ def find_tone_target(syllable: str) -> int | None:
 
 
 def apply_tone_mark(syllable: str, tone_number: str) -> str:
+    """Apply one Tai-lo tone number to a syllable."""
     if tone_number in NO_MARK_TONES:
         return syllable
 
@@ -74,6 +88,7 @@ def apply_tone_mark(syllable: str, tone_number: str) -> str:
 
 
 def convert_match(match: re.Match[str]) -> str:
+    """Convert a regex match containing one syllable plus tone number."""
     token = match.group(0)
     syllable = token[:-1]
     tone_number = token[-1]
@@ -81,6 +96,7 @@ def convert_match(match: re.Match[str]) -> str:
 
 
 def convert(text: str) -> str:
+    """Convert all tone-number syllables in a string."""
     return TONE_NUMBER_PATTERN.sub(convert_match, text)
 
 
@@ -101,10 +117,30 @@ def parse_args() -> argparse.Namespace:
         help="Read text from standard input and write converted text to standard output.",
     )
 
+    parser.add_argument(
+        "--file",
+        help="Read text from a UTF-8 file and convert it.",
+    )
+
+    parser.add_argument(
+        "--out",
+        help="Write converted text to a UTF-8 output file instead of standard output.",
+    )
+
     return parser.parse_args()
 
 
+def output_result(text: str, output_path: str | None) -> None:
+    """Write converted text either to stdout or to a UTF-8 file."""
+    if output_path:
+        with open(output_path, "w", encoding="utf-8", newline="") as file:
+            file.write(text)
+    else:
+        print(text, end="")
+
+
 def run_interactive_mode() -> None:
+    """Run a simple interactive converter prompt."""
     print("TaiLoTyper interactive mode")
     print("Type Tai-lo with tone numbers. Press Enter on a blank line to quit.")
     print()
@@ -119,16 +155,23 @@ def run_interactive_mode() -> None:
 
 
 def main() -> None:
+    """Run the converter from the command line."""
     args = parse_args()
+
+    if args.file:
+        with open(args.file, "r", encoding="utf-8") as file:
+            input_text = file.read()
+        output_result(convert(input_text), args.out)
+        return
 
     if args.stdin:
         input_text = sys.stdin.read()
-        print(convert(input_text), end="")
+        output_result(convert(input_text), args.out)
         return
 
     if args.text:
         input_text = " ".join(args.text)
-        print(convert(input_text))
+        output_result(convert(input_text), args.out)
         return
 
     run_interactive_mode()
