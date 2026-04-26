@@ -2,7 +2,7 @@
 
 **Type Taiwanese Hokkien in Tâi-lô on a standard English keyboard.**
 
-TaiLoTyper is a Windows-friendly tool that lets you type **Taiwanese Hokkien (Tâi-lô / Tai-lo)** using **tone numbers**, then convert it into proper **tone-marked Tai-lo**.
+TaiLoTyper is a Windows-friendly tool that lets you type **Taiwanese Hokkien (Tâi-lô / Tai-lo)** using **tone numbers**, then convert it into proper **tone-marked Tai-lo** with a hotkey.
 
 Instead of manually typing characters like:
 
@@ -31,10 +31,11 @@ Guá ê tshù-tíng ū niau-á.
 
 Windows can display Unicode Tai-lo, but it does **not include a built-in, ergonomic input method** for typing Tai-lo on a standard English keyboard.
 
-TaiLoTyper provides a simpler workflow:
+TaiLoTyper provides a simple workflow:
 
 - Type normal letters
 - Add tone numbers at the end of syllables
+- Select the text
 - Press a hotkey
 - Get proper tone-marked Tai-lo
 
@@ -42,19 +43,17 @@ This project is designed for:
 
 - Tai-lo learners
 - Taiwanese Hokkien learners
-- Teachers
+- teachers
 - people making study materials
 - anyone who wants a practical Tai-lo typing workflow on Windows
 
 ---
 
-# The easiest way to use it (Windows)
-
-## What it does
+# Easiest way to use it (Windows)
 
 TaiLoTyper includes a **Windows hotkey tool**.
 
-### Workflow
+## Workflow
 
 1. Type tone-number Tai-lo anywhere (Notepad, browser, docs, etc.)
 2. Select the text
@@ -77,11 +76,11 @@ Guá ê tshù-tíng ū niau-á.
 
 ---
 
-# Quick setup for non-programmers (Windows)
+# Quick setup (Windows)
 
-If you just want to **use** TaiLoTyper and do not care about Python details, follow these steps.
+If you just want to **use** TaiLoTyper, follow these steps.
 
-## Step 1: Download this project
+## 1. Download this project
 
 Either:
 
@@ -96,7 +95,7 @@ C:\Users\YourName\tailo-typer
 
 ---
 
-## Step 2: Install Python
+## 2. Install Python
 
 Download Python from:
 
@@ -126,7 +125,7 @@ Python 3.x.x
 
 ---
 
-## Step 3: Install AutoHotkey v2
+## 3. Install AutoHotkey v2
 
 Download AutoHotkey v2 from:
 
@@ -136,44 +135,7 @@ Download AutoHotkey v2 from:
 
 ---
 
-## Step 4: Update the script paths (one-time setup)
-
-Open this file:
-
-```text
-src\windows\TaiLoTyper.ahk
-```
-
-Find these two lines:
-
-```ahk
-pythonExe := "C:\Users\tommy\tailo-typer\.venv\Scripts\python.exe"
-scriptPath := "C:\Users\tommy\tailo-typer\src\tailo_converter.py"
-```
-
-Replace them with paths that match **your computer**.
-
-### Example (if you are not using a virtual environment)
-
-```ahk
-pythonExe := "python"
-scriptPath := "C:\Users\YourName\tailo-typer\src\tailo_converter.py"
-```
-
-### Example (if you *are* using the included virtual environment)
-
-```ahk
-pythonExe := "C:\Users\YourName\tailo-typer\.venv\Scripts\python.exe"
-scriptPath := "C:\Users\YourName\tailo-typer\src\tailo_converter.py"
-```
-
-> **Tip:** If you are a normal user and just want it to work, using `pythonExe := "python"` is usually easiest *if Python is installed and on PATH*.
-
-Save the file.
-
----
-
-## Step 5: Run the hotkey script
+## 4. Run the hotkey script
 
 Double-click:
 
@@ -187,7 +149,7 @@ You should see a green AutoHotkey icon in the Windows system tray.
 
 ---
 
-## Step 6: Try it
+## 5. Try it
 
 Open **Notepad** and type:
 
@@ -292,9 +254,8 @@ Check:
 
 - Is text selected?
 - Is AutoHotkey running?
-- Did you set the correct `pythonExe` path?
-- Did you set the correct `scriptPath` path?
 - Does `python --version` work in PowerShell?
+- Did you install **AutoHotkey v2** (not v1)?
 
 ---
 
@@ -402,7 +363,6 @@ Current limitations include:
 - No dictionary validation yet
 - Tone 4 / checked-tone behavior is still simplified
 - The Windows MVP currently requires local Python + AutoHotkey
-- Paths in the `.ahk` script must currently be configured manually
 
 ---
 
