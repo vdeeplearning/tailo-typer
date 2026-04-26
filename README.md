@@ -140,7 +140,7 @@ Planned next step:
 
 ```bash
 
-git clone https://github.com/YOURUSERNAME/tailo-typer.git
+git clone https://github.com/vdeeplearning/tailo-typer.git
 
 cd tailo-typer
 
