@@ -1,15 +1,8 @@
-"""Tai-lo tone-number converter.
-
-Converts Taiwanese Hokkien Tai-lo written with tone numbers into
-tone-marked Tai-lo.
-
-Example:
-    Gua2 e5 tshu3-ting2 u7 niau1-a2.
-    -> Guá ê tshù-tíng ū niau-á.
-"""
+"""Tai-lo tone-number converter."""
 
 from __future__ import annotations
 
+import argparse
 import re
 import sys
 
@@ -25,33 +18,16 @@ TONE_MARKS: dict[str, dict[str, str]] = {
 }
 
 NO_MARK_TONES = {"1", "4"}
-
-# Match one ASCII Tai-lo-looking syllable followed by one tone number.
-# This intentionally avoids matching numbers that are not attached to letters.
 TONE_NUMBER_PATTERN = re.compile(r"[A-Za-z]+[1-8]")
 
 
 def preserve_case(original: str, marked: str) -> str:
-    """Preserve uppercase letters when applying a tone mark."""
     if original.isupper():
         return marked.upper()
     return marked
 
 
 def find_tone_target(syllable: str) -> int | None:
-    """Return the index of the letter that should receive the tone mark.
-
-    This MVP uses a simple Tai-lo-friendly heuristic:
-    1. Prefer `a`
-    2. Then `e`
-    3. Then `oo`, marked on the first `o`
-    4. Then `o`
-    5. Then `i`
-    6. Then `u`
-    7. Then syllabic `m` or `n`
-
-    This is intentionally isolated so the rule can be improved later.
-    """
     lower = syllable.lower()
 
     for vowel in ("a", "e"):
@@ -72,7 +48,6 @@ def find_tone_target(syllable: str) -> int | None:
 
 
 def apply_tone_mark(syllable: str, tone_number: str) -> str:
-    """Apply one Tai-lo tone number to a syllable."""
     if tone_number in NO_MARK_TONES:
         return syllable
 
@@ -99,7 +74,6 @@ def apply_tone_mark(syllable: str, tone_number: str) -> str:
 
 
 def convert_match(match: re.Match[str]) -> str:
-    """Convert a regex match containing one syllable plus tone number."""
     token = match.group(0)
     syllable = token[:-1]
     tone_number = token[-1]
@@ -107,18 +81,57 @@ def convert_match(match: re.Match[str]) -> str:
 
 
 def convert(text: str) -> str:
-    """Convert all tone-number syllables in a string."""
     return TONE_NUMBER_PATTERN.sub(convert_match, text)
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Convert Tai-lo tone-number input into tone-marked Tai-lo."
+    )
+
+    parser.add_argument(
+        "text",
+        nargs="*",
+        help="Text to convert. If omitted, interactive mode starts.",
+    )
+
+    parser.add_argument(
+        "--stdin",
+        action="store_true",
+        help="Read text from standard input and write converted text to standard output.",
+    )
+
+    return parser.parse_args()
+
+
+def run_interactive_mode() -> None:
+    print("TaiLoTyper interactive mode")
+    print("Type Tai-lo with tone numbers. Press Enter on a blank line to quit.")
+    print()
+
+    while True:
+        input_text = input("> ")
+
+        if not input_text:
+            break
+
+        print(convert(input_text))
+
+
 def main() -> None:
-    """Run the converter from the command line."""
-    if len(sys.argv) < 2:
-        print("Usage: python src/tailo_converter.py \"Gua2 e5 tshu3\"")
+    args = parse_args()
+
+    if args.stdin:
+        input_text = sys.stdin.read()
+        print(convert(input_text), end="")
         return
 
-    input_text = " ".join(sys.argv[1:])
-    print(convert(input_text))
+    if args.text:
+        input_text = " ".join(args.text)
+        print(convert(input_text))
+        return
+
+    run_interactive_mode()
 
 
 if __name__ == "__main__":
